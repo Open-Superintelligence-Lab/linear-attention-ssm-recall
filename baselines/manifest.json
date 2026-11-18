@@ -1,0 +1,178 @@
+[
+ {
+  "method": "attention",
+  "source": "zoology.mixers.attention.MHA",
+  "repo": "https://github.com/HazyResearch/zoology",
+  "commit": "1ad20d193b6113cae1e8f3c655c300d7b4b3f4bb",
+  "license": "Apache-2.0",
+  "changes": "zoology's MHA as zoology runs it (2 heads, dropout 0.1). Inside zoology's MQAR model (zoology/experiments/models_repo.py): 2 TransformerBlocks, LayerNorm pre-norm, no MLP, layer 0 BaseConv(kernel 3), layer 1 the method; d_model 64, vocab 8,192.",
+  "match_check": "not needed",
+  "match_detail": "zoology's own attention layer, used unchanged",
+  "benchmark": "mqar_zoology (laptop size); ruler_niah_tokens (RULER NIAH configs as tokens)",
+  "our_score": {
+   "mqar_zoology": {
+    "score": 0.9998,
+    "lr": 0.01,
+    "acc": {
+     "L64_kv4": 0.9995,
+     "L64_kv8": 1.0,
+     "L64_kv16": 0.9999,
+     "L128_kv32": 1.0,
+     "L256_kv64": 0.9998
+    }
+   },
+   "ruler_niah_tokens": {
+    "score": 0.7995,
+    "lr": 0.01,
+    "by_len": {
+     "128": 0.8184,
+     "256": 0.7806
+    }
+   }
+  },
+  "published_score": {
+   "mqar": "Zoology (2312.04927) and Based (2402.18668) figures: attention solves MQAR at every d_model tested (figure only)"
+  },
+  "published_order_holds": true
+ },
+ {
+  "method": "based",
+  "source": "zoology.mixers.based.Based",
+  "repo": "https://github.com/HazyResearch/zoology",
+  "commit": "1ad20d193b6113cae1e8f3c655c300d7b4b3f4bb",
+  "license": "Apache-2.0",
+  "changes": "zoology's own Based layer (Taylor map, feature_dim 16, 1 head, quadratic train view). Inside zoology's MQAR model (zoology/experiments/models_repo.py): 2 TransformerBlocks, LayerNorm pre-norm, no MLP, layer 0 BaseConv(kernel 3), layer 1 the method; d_model 64, vocab 8,192.",
+  "match_check": "pass",
+  "match_detail": "zoology Based vs HazyResearch/based LinearAttention (TaylorExp 16), same weights, B=2 T=100 d=64: out_rel_err 0.0e+00, x_grad_rel_err 0.0e+00, param_grad_max_rel_err 0.0e+00",
+  "benchmark": "mqar_zoology (laptop size); ruler_niah_tokens (RULER NIAH configs as tokens)",
+  "our_score": {
+   "mqar_zoology": {
+    "score": 0.9634,
+    "lr": 0.003,
+    "acc": {
+     "L64_kv4": 0.999,
+     "L64_kv8": 0.9995,
+     "L64_kv16": 0.9973,
+     "L128_kv32": 0.9789,
+     "L256_kv64": 0.8425
+    }
+   }
+  },
+  "published_score": {
+   "mqar": "Based paper figure: Based is the strongest sub-quadratic model on MQAR at equal state (figure only)"
+  },
+  "published_order_holds": true
+ },
+ {
+  "method": "gated_deltanet",
+  "source": "fla.layers.GatedDeltaNet",
+  "repo": "https://github.com/fla-org/flash-linear-attention",
+  "commit": "cc4648a3b35c27c6bc6b3cfb0079a14d57bcbc5b",
+  "license": "MIT",
+  "changes": "num_heads 2, head_dim 32, expand_v 2, short conv 4, no output gate (zoology's settings). Runs on CPU: Triton kernels replaced by the repo's own torch reference (scan=naive) or by env/dplr.py (scan=engine, used for the runs); the module code itself is unchanged. Inside zoology's MQAR model (zoology/experiments/models_repo.py): 2 TransformerBlocks, LayerNorm pre-norm, no MLP, layer 0 BaseConv(kernel 3), layer 1 the method; d_model 64, vocab 8,192.",
+  "match_check": "pass",
+  "match_detail": "official layer with the CPU scan vs the official torch reference, same weights, B=2 T=100 d=64: out_rel_err 3.0e-07, x_grad_rel_err 2.9e-07, param_grad_max_rel_err 1.1e-06",
+  "benchmark": "mqar_zoology (laptop size); ruler_niah_tokens (RULER NIAH configs as tokens)",
+  "our_score": {
+   "mqar_zoology": {
+    "score": 0.9334,
+    "lr": 0.01,
+    "acc": {
+     "L64_kv4": 0.9995,
+     "L64_kv8": 1.0,
+     "L64_kv16": 0.9969,
+     "L128_kv32": 0.9659,
+     "L256_kv64": 0.7046
+    }
+   }
+  },
+  "published_score": {
+   "ruler": "Gated DeltaNet paper (2412.06464) Table 2, 1.3B pretrained, S-NIAH-1/2/3 at 1K: 98.4 / 100.0 / 86.6"
+  },
+  "published_order_holds": true
+ },
+ {
+  "method": "gla",
+  "source": "fla.layers.GatedLinearAttention",
+  "repo": "https://github.com/fla-org/flash-linear-attention",
+  "commit": "cc4648a3b35c27c6bc6b3cfb0079a14d57bcbc5b",
+  "license": "MIT",
+  "changes": "num_heads 2, expand_k 0.5, expand_v 1, no short conv. Runs on CPU: Triton kernels replaced by the repo's own torch reference (scan=naive) or by env/dplr.py (scan=engine, used for the runs); the module code itself is unchanged. Inside zoology's MQAR model (zoology/experiments/models_repo.py): 2 TransformerBlocks, LayerNorm pre-norm, no MLP, layer 0 BaseConv(kernel 3), layer 1 the method; d_model 64, vocab 8,192.",
+  "match_check": "pass",
+  "match_detail": "official layer with the CPU scan vs the official torch reference, same weights, B=2 T=100 d=64: out_rel_err 1.3e-06, x_grad_rel_err 2.9e-07, param_grad_max_rel_err 5.5e-07",
+  "benchmark": "mqar_zoology (laptop size); ruler_niah_tokens (RULER NIAH configs as tokens)",
+  "our_score": {
+   "mqar_zoology": {
+    "score": 0.4863,
+    "lr": 0.003,
+    "acc": {
+     "L64_kv4": 0.9475,
+     "L64_kv8": 0.8095,
+     "L64_kv16": 0.5011,
+     "L128_kv32": 0.1464,
+     "L256_kv64": 0.0271
+    }
+   }
+  },
+  "published_score": {
+   "mqar": "GLA paper (2312.06635) MQAR figure: GLA below attention, above Mamba-1 (figure only)"
+  },
+  "published_order_holds": true
+ },
+ {
+  "method": "rwkv7",
+  "source": "fla.layers.RWKV7Attention",
+  "repo": "https://github.com/fla-org/flash-linear-attention",
+  "commit": "cc4648a3b35c27c6bc6b3cfb0079a14d57bcbc5b",
+  "license": "MIT",
+  "changes": "head_dim 64, low-rank dims 16/64/16/16; built as layer 1 of 2 and run with v_first = v (zoology's copy with v_first None does the same). Runs on CPU: Triton kernels replaced by the repo's own torch reference (scan=naive) or by env/dplr.py (scan=engine, used for the runs); the module code itself is unchanged. Inside zoology's MQAR model (zoology/experiments/models_repo.py): 2 TransformerBlocks, LayerNorm pre-norm, no MLP, layer 0 BaseConv(kernel 3), layer 1 the method; d_model 64, vocab 8,192.",
+  "match_check": "pass",
+  "match_detail": "official layer with the CPU scan vs the official torch reference, same weights, B=2 T=100 d=64: out_rel_err 3.9e-07, x_grad_rel_err 4.6e-07, param_grad_max_rel_err 1.0e-06",
+  "benchmark": "mqar_zoology (laptop size); ruler_niah_tokens (RULER NIAH configs as tokens)",
+  "our_score": {
+   "mqar_zoology": {
+    "score": 0.9133,
+    "lr": 0.01,
+    "acc": {
+     "L64_kv4": 1.0,
+     "L64_kv8": 0.9992,
+     "L64_kv16": 0.9983,
+     "L128_kv32": 0.9599,
+     "L256_kv64": 0.6089
+    }
+   }
+  },
+  "published_score": {
+   "mqar": "RWKV-7 paper (2503.14456) Table 6, d_model 64: >99% at (64,4), (128,8), (256,16); 98.43 at (512,64); best of 3 lr"
+  },
+  "published_order_holds": true
+ },
+ {
+  "method": "mamba2",
+  "source": "mamba_ssm.modules.mamba2.Mamba2",
+  "repo": "https://github.com/state-spaces/mamba",
+  "commit": "e9594ce1c732d97440f0332fdc43170a2294dbfa",
+  "license": "Apache-2.0",
+  "changes": "d_state 16, headdim 64, expand 2, chunk 32, use_mem_eff_path False (nn.Conv1d path); Mamba2 in both layers, no BaseConv, LayerNorm blocks (zoology's Mamba2Block uses RMSNorm). Runs on CPU: Triton kernels replaced by the repo's own torch reference (scan=naive) or by env/dplr.py (scan=engine, used for the runs); the module code itself is unchanged.",
+  "match_check": "pass",
+  "match_detail": "official layer with the CPU scan vs the official torch reference, same weights, B=2 T=100 d=64: out_rel_err 1.7e-07, x_grad_rel_err 1.9e-07, param_grad_max_rel_err 4.8e-07",
+  "benchmark": "mqar_zoology (laptop size); ruler_niah_tokens (RULER NIAH configs as tokens)",
+  "our_score": {
+   "mqar_zoology": {
+    "score": 0.561,
+    "lr": 0.01,
+    "acc": {
+     "L64_kv4": 0.941,
+     "L64_kv8": 0.856,
+     "L64_kv16": 0.6414,
+     "L128_kv32": 0.2907,
+     "L256_kv64": 0.076
+    }
+   }
+  },
+  "published_score": {
+   "ruler": "Gated DeltaNet paper Table 2, Mamba2 1.3B, S-NIAH-1/2/3 at 1K: 99.2 / 99.4 / 64.4"
+  },
+  "published_order_holds": true
+ }
+]

@@ -1,0 +1,8 @@
+data/*
+!data/generate.py
+__pycache__/
+*.pyc
+.DS_Store
+!data/download.sh
+!data/checksums.sha256
+!data/runs/

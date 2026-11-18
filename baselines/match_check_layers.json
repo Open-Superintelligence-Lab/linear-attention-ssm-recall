@@ -1,0 +1,74 @@
+{
+ "what": "official layer, scan=engine vs scan=naive (the repos' torch references), float32 (the fla references compute in float32), B=2 T=100 d=64",
+ "tolerance": "max relative error < 1e-4",
+ "results": {
+  "mamba2": {
+   "out_rel_err": 1.6892471421670052e-07,
+   "x_grad_rel_err": 1.8771004306472605e-07,
+   "param_grad_max_rel_err": 4.808889002561045e-07,
+   "n_param_grads": 8,
+   "out_abs_max": 2.117084264755249,
+   "naive_secs": 0.073,
+   "engine_secs": 0.029,
+   "pass": true
+  },
+  "gated_deltanet": {
+   "out_rel_err": 3.0353174906849745e-07,
+   "x_grad_rel_err": 2.9275742008394445e-07,
+   "param_grad_max_rel_err": 1.0948258477583295e-06,
+   "n_param_grads": 13,
+   "out_abs_max": 0.8836666941642761,
+   "naive_secs": 0.05,
+   "engine_secs": 0.007,
+   "pass": true
+  },
+  "gated_deltanet_negeig": {
+   "out_rel_err": 3.7561477483905037e-07,
+   "x_grad_rel_err": 3.4394068393339694e-07,
+   "param_grad_max_rel_err": 5.977788077871082e-07,
+   "n_param_grads": 13,
+   "out_abs_max": 0.7339207530021667,
+   "naive_secs": 0.048,
+   "engine_secs": 0.008,
+   "pass": true
+  },
+  "gla": {
+   "out_rel_err": 1.3409394341579173e-06,
+   "x_grad_rel_err": 2.863844770217838e-07,
+   "param_grad_max_rel_err": 5.519628416550404e-07,
+   "n_param_grads": 9,
+   "out_abs_max": 0.7875969409942627,
+   "naive_secs": 0.02,
+   "engine_secs": 0.008,
+   "pass": true
+  },
+  "rwkv7_layer0": {
+   "out_rel_err": 3.9013261243781017e-07,
+   "x_grad_rel_err": 4.6280788978947385e-07,
+   "param_grad_max_rel_err": 1.0289465990354074e-06,
+   "n_param_grads": 23,
+   "out_abs_max": 0.08392482250928879,
+   "naive_secs": 0.046,
+   "engine_secs": 0.025,
+   "pass": true
+  },
+  "rwkv7_layer1": {
+   "out_rel_err": 5.268419158710458e-07,
+   "x_grad_rel_err": 3.353969191266515e-07,
+   "param_grad_max_rel_err": 9.346525757791824e-07,
+   "n_param_grads": 26,
+   "out_abs_max": 0.10606474429368973,
+   "naive_secs": 0.035,
+   "engine_secs": 0.022,
+   "pass": true
+  },
+  "based_zoology_vs_hazyresearch_based": {
+   "out_rel_err": 0.0,
+   "x_grad_rel_err": 0.0,
+   "param_grad_max_rel_err": 0.0,
+   "n_param_grads": 4,
+   "out_abs_max": 1.1344516277313232,
+   "pass": true
+  }
+ }
+}
